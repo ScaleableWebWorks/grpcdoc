@@ -7,11 +7,35 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        {{.Style}}
+        {{ .Style }}
     </style>
 </head>
 <body>
-    <h1>Documentation: {{.Filename}}</h1>
+<h1>Documentation: {{.Filename}}</h1>
+
+<aside>
+    <h2>Index</h2>
+    <h3>Services</h3>
+    <ul>
+        {{range .Services}}
+        <li><a href="#{{.Name}}">{{.Name}}</a></li>
+        {{end}}
+    </ul>
+    <h3>Messages</h3>
+    <ul>
+        {{range .Messages}}
+        <li><a href="#{{.Name}}">{{.Name}}</a></li>
+        {{end}}
+    </ul>
+    <h3>Enums</h3>
+    <ul>
+        {{range .Enums}}
+        <li><a href="#{{.Name}}">{{.Name}}</a></li>
+        {{end}}
+    </ul>
+</aside>
+
+<main>
     <h2>Services</h2>
     <div class="element">
         <h3>Services</h3>
@@ -30,22 +54,23 @@
     </div>
 
     {{range .Services}}
-        <div class="element service">
-            <h3>{{.Name}}</h3>
-            <p>{{.Description}}</p>
-            <table>
-                <tr>
-                    <th>Method</th>
-                    <th>Description</th>
-                </tr>
-                {{range .Methods}}
-                <tr>
-                    <td><strong>{{.Name}}</strong>&nbsp;(&nbsp;<a href="#{{.Input}}">{{.Input}}</a>&nbsp;) <a href="#{{.Output}}">{{.Output}}</a></td>
-                    <td>{{.Description}}</td>
-                </tr>
-                {{end}}
-            </table>
-        </div>
+    <div class="element service">
+        <h3>{{.Name}}</h3>
+        <p>{{.Description}}</p>
+        <table>
+            <tr>
+                <th>Method</th>
+                <th>Description</th>
+            </tr>
+            {{range .Methods}}
+            <tr>
+                <td><strong>{{.Name}}</strong>&nbsp;(&nbsp;<a href="#{{.Input}}">{{.Input}}</a>&nbsp;) <a
+                        href="#{{.Output}}">{{.Output}}</a></td>
+                <td>{{.Description}}</td>
+            </tr>
+            {{end}}
+        </table>
+    </div>
     {{end}}
 
     <h2>Messages</h2>
@@ -57,40 +82,64 @@
                 <th>Name</th>
                 <th>Description</th>
             </tr>
-        {{range .Messages}}
+            {{range .Messages}}
             <tr>
                 <td><a href="#{{.Name}}">{{.Name}}</a></td>
                 <td>{{.Description}}</td>
             </tr>
-        {{end}}
+            {{end}}
         </table>
     </div>
 
     <hr>
 
     {{range .Messages}}
-        <a id="{{.Name}}"></a>
-        <div class="element message">
-            <h3>{{.Name}}</h3>
-            <p>{{.Description}}</p>
+    <a id="{{.Name}}"></a>
+    <div class="element message">
+        <h3>{{.Name}}</h3>
+        <p>{{.Description}}</p>
 
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                </tr>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
             {{range .Fields}}
-                <tr>
-                    <td>{{.Name}}</td>
-                    <td>{{.Position}}</td>
-                    <td>{{.Type}}</td>
-                    <td>{{.Description}}</td>
-                </tr>
+            <tr>
+                <td>{{.Name}}</td>
+                <td>{{.Position}}</td>
+                <td>{{.Type}}</td>
+                <td>{{.Description}}</td>
+            </tr>
             {{end}}
-            </table>
-        </div>
+        </table>
+    </div>
     {{end}}
+
+    <h2>Enums</h2>
+    {{range .Enums}}
+    <a id="{{.Name}}"></a>
+    <div class="element enum">
+        <h3>{{.Name}}</h3>
+        <p>{{.Description}}</p>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Description</th>
+            </tr>
+            {{range .Fields}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td>{{.Position}}</td>
+                <td>{{.Description}}</td>
+            </tr>
+            {{end}}
+        </table>
+    </div>
+    {{end}}
+</main>
 </body>
 </html>

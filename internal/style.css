@@ -1,7 +1,21 @@
-body {
-    font-family: sans-serif;
-    max-width: 800px;
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+html, body {
+    font-family: 'Open Sans', sans-serif;
+    max-width: 1024px;
     margin: auto;
+    scroll-behavior: smooth;
+}
+
+aside {
+    float: right;
+    height: 100%;
+    margin-left: 2em;
+
+}
+
+main {
+    width: 800px;
 }
 
 .element {

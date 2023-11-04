@@ -27,6 +27,8 @@ func main() {
 	}
 
 	parser := proto.NewParser(reader)
+	parser.Filename(*fileFlag)
+
 	definition, err := parser.Parse()
 	if err != nil {
 		panic(err)

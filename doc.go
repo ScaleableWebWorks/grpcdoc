@@ -39,11 +39,18 @@ type MethodDoc struct {
 	Output      string
 }
 
+type EnumDoc struct {
+	Name        string
+	Description string
+	Fields      []*FieldDoc
+}
+
 type Data struct {
 	Filename string
 	Style    template.CSS
 	Services []*ServiceDoc
 	Messages []*MessageDoc
+	Enums    []*EnumDoc
 }
 
 func GenerateDoc(definition *proto.Proto) (string, error) {
@@ -54,8 +61,15 @@ func GenerateDoc(definition *proto.Proto) (string, error) {
 
 	var services []*ServiceDoc
 	var messages []*MessageDoc
+	var enums []*EnumDoc
 	for _, element := range definition.Elements {
 		switch element.(type) {
+		case *proto.Import:
+			imp := element.(*proto.Import)
+			println("Import: ", imp.Filename)
+		case *proto.Package:
+			pkg := element.(*proto.Package)
+			println("Package: ", pkg.Name)
 		case *proto.Service:
 			service := element.(*proto.Service)
 			var methods []*MethodDoc
@@ -102,14 +116,38 @@ func GenerateDoc(definition *proto.Proto) (string, error) {
 			}
 
 			messages = append(messages, &doc)
+		case *proto.Enum:
+			enum := element.(*proto.Enum)
+
+			var fields []*FieldDoc
+			for _, element := range enum.Elements {
+				switch element.(type) {
+				case *proto.EnumField:
+					field := element.(*proto.EnumField)
+					doc := FieldDoc{
+						Position:    uint8(field.Integer),
+						Name:        field.Name,
+						Description: field.Comment.Message(),
+					}
+					fields = append(fields, &doc)
+				}
+			}
+			doc := EnumDoc{
+				Name:        enum.Name,
+				Description: enum.Comment.Message(),
+				Fields:      fields,
+			}
+
+			enums = append(enums, &doc)
 		}
 	}
 
 	data := Data{
-		Filename: "test.proto",
+		Filename: definition.Filename,
 		Style:    template.CSS(style),
 		Services: services,
 		Messages: messages,
+		Enums:    enums,
 	}
 
 	buf := new(bytes.Buffer)

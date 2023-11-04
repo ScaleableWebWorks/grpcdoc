@@ -1,5 +1,9 @@
 syntax = "proto3";
 
+package foo.bar;
+
+import "google/protobuf/timestamp.proto";
+
 // Enums
 
 // Status indicates the status of an operation.
@@ -150,6 +154,8 @@ message TaskAssignment {
   Priority task_priority = 4;
   // State of the task assignment.
   State task_state = 5;
+  // Timestamp for when the task assignment was created.
+  google.protobuf.Timestamp modifiedTime = 6;
 }
 
 // The SearchService class provides methods for conducting various types of searches within a given dataset.
