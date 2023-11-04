@@ -10,17 +10,13 @@
 
 ## Installation
 
-OS X & Linux:
+### Manual installation
 
-```sh
-# TODO
-```
-
-Windows:
-
-```sh
-# TODO
-```
+1. Go to [releases](https://github.com/ScaleableWebWorks/grpcdoc/releases)
+2. Download the latest version for your operating system
+3. Unzip the file
+4. Move the binary to a location in your path
+5. Run `grpcdoc` in your terminal
 
 ## Usage example
 
