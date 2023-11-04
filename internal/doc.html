@@ -38,7 +38,7 @@
 <main>
     <h2>Services</h2>
     <div class="element">
-        <h3>Services</h3>
+        <h3>Overview</h3>
         <table>
             <tr>
                 <th>Name</th>
@@ -76,7 +76,7 @@
     <h2>Messages</h2>
 
     <div class="element">
-        <h3>Messages</h3>
+        <h3>Overview</h3>
         <table>
             <tr>
                 <th>Name</th>
@@ -110,7 +110,13 @@
             <tr>
                 <td>{{.Name}}</td>
                 <td>{{.Position}}</td>
-                <td>{{.Type}}</td>
+                <td>
+                    {{ if .IsScalar }}
+                        {{.Type}}{{ if .IsRepeated }}[]{{ end }}
+                    {{ else }}
+                        <a href="#{{.Type}}">{{.Type}}{{ if .IsRepeated }}[]{{ end }}</a>
+                    {{ end }}
+                </td>
                 <td>{{.Description}}</td>
             </tr>
             {{end}}

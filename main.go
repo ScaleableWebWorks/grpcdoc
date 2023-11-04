@@ -3,21 +3,17 @@ package main
 import (
 	"flag"
 	"github.com/emicklei/proto"
-	"io"
 	"os"
 )
 
 func main() {
-	fileFlag := flag.String("file", "", "proto file to parse")
 	outputFlag := flag.String("out", "", "output file (default: stdout)")
 
 	flag.Parse()
 
-	var reader io.Reader
-	if *fileFlag == "" {
-		reader = os.Stdin
-	} else {
-		file, err := os.Open(*fileFlag)
+	var definitions []*proto.Proto
+	for _, arg := range flag.Args() {
+		file, err := os.Open(arg)
 		if err != nil {
 			panic(err)
 		}
@@ -28,18 +24,17 @@ func main() {
 				panic(err)
 			}
 		}(file)
-		reader = file
+
+		parser := proto.NewParser(file)
+		definition, err := parser.Parse()
+		if err != nil {
+			panic(err)
+		}
+
+		definitions = append(definitions, definition)
 	}
 
-	parser := proto.NewParser(reader)
-	parser.Filename(*fileFlag)
-
-	definition, err := parser.Parse()
-	if err != nil {
-		panic(err)
-	}
-
-	doc, err := GenerateDoc(definition)
+	doc, err := GenerateDoc(definitions...)
 	if err != nil {
 		panic(err)
 	}
