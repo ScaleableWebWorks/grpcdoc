@@ -19,25 +19,25 @@ Windows:
 
 ## Usage example
 
-### Create a documentation for a single file
+__Create a documentation for a single file__
 
 ```sh
 grpcdoc -out doc.html ./path/to/your/file.proto
 ```
 
-### Create a documentation for multiple files
+__Create a documentation for multiple files__
 
 ```sh
 grpcdoc -out doc.html ./path/to/your/file1.proto ./path/to/your/file2.proto
 ```
 
-### Read all .proto files from a directory
+__Read all .proto files from a directory__
 
 ```sh
 grpcdoc -out doc.html ./path/to/your/protos
 ```
 
-### Create a documentation for multiple files and include a custom css file
+__Create a documentation for multiple files and include a custom css file__
 
 ```sh
 grpcdoc -out doc.html -style custom.css ./path/to/your/file1.proto
@@ -46,6 +46,8 @@ grpcdoc -out doc.html -style custom.css ./path/to/your/file1.proto
 _For more examples and usage, please refer to the [Wiki][wiki]._
 
 ## Development setup
+
+To start development you need to have [golang](https://go.dev/dl/) installed on your system.
 
 ```sh
 git clone https://github.com/ScaleableWebWorks/grpcdoc.git
