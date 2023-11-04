@@ -8,30 +8,38 @@ import (
 
 func main() {
 	outputFlag := flag.String("out", "", "output file (default: stdout)")
-
 	flag.Parse()
 
 	var definitions []*proto.Proto
-	for _, arg := range flag.Args() {
-		file, err := os.Open(arg)
-		if err != nil {
-			panic(err)
-		}
-
-		defer func(file *os.File) {
-			err := file.Close()
-			if err != nil {
-				panic(err)
-			}
-		}(file)
-
-		parser := proto.NewParser(file)
+	if len(flag.Args()) == 0 {
+		// Read from stdin if no files are given.
+		parser := proto.NewParser(os.Stdin)
 		definition, err := parser.Parse()
 		if err != nil {
 			panic(err)
 		}
 
 		definitions = append(definitions, definition)
+	} else {
+		for _, arg := range flag.Args() {
+			file, err := os.Open(arg)
+			if err != nil {
+				panic(err)
+			}
+
+			parser := proto.NewParser(file)
+			definition, err := parser.Parse()
+			if err != nil {
+				panic(err)
+			}
+
+			definitions = append(definitions, definition)
+
+			err = file.Close()
+			if err != nil {
+				panic(err)
+			}
+		}
 	}
 
 	doc, err := GenerateDoc(definitions...)

@@ -44,6 +44,12 @@ __Create a documentation for multiple files and include a custom css file__
 grpcdoc -out doc.html -style custom.css ./path/to/your/file1.proto
 ```
 
+__Read proto file from stdin__
+
+```sh
+cat ../examples/example.proto | grpcdoc > doc.html
+```
+
 _For more examples and usage, please refer to the [Wiki][wiki]._
 
 ## Development setup
