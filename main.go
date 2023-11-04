@@ -22,7 +22,12 @@ func main() {
 			panic(err)
 		}
 
-		defer file.Close()
+		defer func(file *os.File) {
+			err := file.Close()
+			if err != nil {
+				panic(err)
+			}
+		}(file)
 		reader = file
 	}
 
@@ -50,7 +55,12 @@ func main() {
 			panic(err)
 		}
 
-		defer file.Close()
+		defer func(file *os.File) {
+			err := file.Close()
+			if err != nil {
+				panic(err)
+			}
+		}(file)
 
 		_, err = file.WriteString(doc)
 		if err != nil {
