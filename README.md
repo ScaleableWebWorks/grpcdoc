@@ -1,4 +1,7 @@
 # grpcdoc
+
+![build workflow](https://github.com/ScaleableWebWorks/grpcdoc/actions/workflows/build.yml/badge.svg)
+
 > Create comprehensive html documentation from your grpc/protobuf files.
 
 `grpcdoc` is a command line tool written in golang which takes grpc/protobuf files and generates a comprehensive html documentation for it.
