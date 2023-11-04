@@ -109,7 +109,7 @@
             {{range .Fields}}
             <tr>
                 <td>{{.Name}}</td>
-                <td>{{.Position}}</td>
+                <td>{{.FieldNumber}}</td>
                 <td>
                     {{ if .IsScalar }}
                         {{.Type}}{{ if .IsRepeated }}[]{{ end }}
@@ -139,7 +139,7 @@
             {{range .Fields}}
             <tr>
                 <td>{{.Name}}</td>
-                <td>{{.Position}}</td>
+                <td>{{.FieldNumber}}</td>
                 <td>{{.Description}}</td>
             </tr>
             {{end}}

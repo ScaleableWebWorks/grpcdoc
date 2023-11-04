@@ -9,36 +9,47 @@ import (
 	"strings"
 )
 
+// Holds the html template for the documentation.
+//
 //go:embed internal/doc.html
 var doc string
 
+// Holds the default css style for the documentation.
+//
 //go:embed internal/style.css
 var style string
 
+// A list of all protobuf scalar types as defined here:
+// https://developers.google.com/protocol-buffers/docs/proto3#scalar
 var scalarTypes = [...]string{"double", "float", "int32", "int64", "uint32", "uint64",
 	"sint32", "sint64", "fixed32", "fixed64", "sfixed32", "sfixed64", "bool", "string", "bytes"}
 
+// ServiceDoc represents a service which is used for template rendering.
 type ServiceDoc struct {
 	Name        string
 	Description string
 	Methods     []*MethodDoc
 }
 
+// MessageDoc represents a message which is used for template rendering.
 type MessageDoc struct {
 	Name        string
 	Description string
 	Fields      []*FieldDoc
 }
 
+// FieldDoc represents a field of a message or enum type which is used for template rendering.
 type FieldDoc struct {
-	Position    uint8
+	FieldNumber uint8
 	Name        string
 	Description string
 	Type        string
-	IsScalar    bool
-	IsRepeated  bool
+	// IsScalar is true if the field type is a protobuf scalar type.
+	IsScalar   bool
+	IsRepeated bool
 }
 
+// MethodDoc represents a method of a grpc service which is used for template rendering.
 type MethodDoc struct {
 	Name        string
 	Description string
@@ -46,6 +57,7 @@ type MethodDoc struct {
 	Output      string
 }
 
+// EnumDoc represents an enum which is used for template rendering.
 type EnumDoc struct {
 	Name        string
 	Description string
@@ -60,6 +72,7 @@ type Data struct {
 	Enums    []*EnumDoc
 }
 
+// GenerateDoc takes a list of protobuf definitions and generates a html documentation.
 func GenerateDoc(definitions ...*proto.Proto) (string, error) {
 	t, err := template.New("doc").Parse(doc)
 	if err != nil {
@@ -111,7 +124,7 @@ func GenerateDoc(definitions ...*proto.Proto) (string, error) {
 						field := element.(*proto.NormalField)
 
 						doc := FieldDoc{
-							Position:    uint8(field.Sequence),
+							FieldNumber: uint8(field.Sequence),
 							Name:        field.Name,
 							Description: comment(field.Comment),
 							Type:        fullQualifiedName(pkgName, field.Type),
@@ -138,7 +151,7 @@ func GenerateDoc(definitions ...*proto.Proto) (string, error) {
 					case *proto.EnumField:
 						field := element.(*proto.EnumField)
 						doc := FieldDoc{
-							Position:    uint8(field.Integer),
+							FieldNumber: uint8(field.Integer),
 							Name:        field.Name,
 							Description: comment(field.Comment),
 						}
@@ -173,6 +186,7 @@ func GenerateDoc(definitions ...*proto.Proto) (string, error) {
 	return buf.String(), nil
 }
 
+// isScalarType returns true if the given type is a protobuf scalar type.
 func isScalarType(t string) bool {
 	for _, scalarType := range scalarTypes {
 		if t == scalarType {
@@ -182,6 +196,11 @@ func isScalarType(t string) bool {
 	return false
 }
 
+// fullQualifiedName returns the full qualified name of the given type if applicable.
+// In the following cases the name is returned as is:
+//   - pkgName is nil or empty
+//   - name contains a dot (is already a full qualified name)
+//   - name is a scalar type
 func fullQualifiedName(pkgName *string, name string) string {
 	if pkgName == nil || *pkgName == "" {
 		return name
@@ -194,6 +213,7 @@ func fullQualifiedName(pkgName *string, name string) string {
 	return fmt.Sprintf("%v.%v", *pkgName, name)
 }
 
+// comment returns the comment or empty string if the comment is nil.
 func comment(c *proto.Comment) string {
 	if c == nil {
 		return ""
