@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+// Enums
+
+// Status indicates the status of an operation.
+enum Status {
+  // Operation was successful.
+  OK = 0;
+  // An error occurred during the operation.
+  ERROR = 1;
+  // Status is unknown.
+  UNKNOWN = 2;
+}
+
+// Priority represents the priority level of a task or request.
+enum Priority {
+  // Low priority.
+  LOW = 0;
+  // Medium priority.
+  MEDIUM = 1;
+  // High priority.
+  HIGH = 2;
+}
+
+// Type represents different types of entities.
+enum Type {
+  // Type A entity.
+  TYPE_A = 0;
+  // Type B entity.
+  TYPE_B = 1;
+  // Type C entity.
+  TYPE_C = 2;
+}
+
+// State indicates the state of an entity.
+enum State {
+  // Entity is in an active state.
+  ACTIVE = 0;
+  // Entity is in an inactive state.
+  INACTIVE = 1;
+}
+
+// Action represents different actions that can be performed.
+enum Action {
+  // Start action.
+  START = 0;
+  // Stop action.
+  STOP = 1;
+  // Pause action.
+  PAUSE = 2;
+}
+
+// Messages
+
+// RequestMessage represents a request entity.
+message RequestMessage {
+  // Unique ID for the request.
+  int32 request_id = 1;
+  // Content of the request.
+  string request_content = 2;
+  // Priority of the request.
+  Priority priority = 3;
+  // Type of the request.
+  Type type = 4;
+  // State of the request.
+  State state = 5;
+}
+
+// ResponseMessage represents a response entity.
+message ResponseMessage {
+  // Unique ID for the response.
+  int32 response_id = 1;
+  // Content of the response.
+  string response_content = 2;
+  // Status of the response.
+  Status status = 3;
+}
+
+// UserInfo contains information about a user.
+message UserInfo {
+  // Unique ID for the user.
+  int32 user_id = 1;
+  // Username of the user.
+  string username = 2;
+  // Email address of the user.
+  string email = 3;
+  // State of the user.
+  State user_state = 4;
+}
+
+// TaskInfo contains information about a task.
+message TaskInfo {
+  // Unique ID for the task.
+  int32 task_id = 1;
+  // Name of the task.
+  string task_name = 2;
+  // Priority of the task.
+  Priority task_priority = 3;
+  // Type of the task.
+  Type task_type = 4;
+}
+
+// Event represents an event entity.
+message Event {
+  // Unique ID for the event.
+  int32 event_id = 1;
+  // Name of the event.
+  string event_name = 2;
+  // Type of the event.
+  Type event_type = 3;
+  // State of the event.
+  State event_state = 4;
+  // Action associated with the event.
+  Action event_action = 5;
+}
+
+// Update represents an update entity.
+message Update {
+  // Unique ID for the update.
+  int32 update_id = 1;
+  // Message content of the update.
+  string update_message = 2;
+  // Status of the update.
+  Status update_status = 3;
+  // Type of the update.
+  Type update_type = 4;
+}
+
+// Report represents a report entity.
+message Report {
+  // Unique ID for the report.
+  int32 report_id = 1;
+  // Content of the report.
+  string report_content = 2;
+  // Priority of the report.
+  Priority report_priority = 3;
+  // State of the report.
+  State report_state = 4;
+}
+
+// TaskAssignment represents an assignment of a task to a user.
+message TaskAssignment {
+  // Unique ID for the assignment.
+  int32 assignment_id = 1;
+  // Unique ID for the task.
+  int32 task_id = 2;
+  // Unique ID for the user.
+  int32 user_id = 3;
+  // Priority of the task assignment.
+  Priority task_priority = 4;
+  // State of the task assignment.
+  State task_state = 5;
+}
+
+// The SearchService class provides methods for conducting various types of searches within a given dataset.
+// It supports both basic and advanced search functionalities, enabling users to retrieve relevant information
+// efficiently and effectively.
+//
+// @constructor
+// Initializes a new instance of the SearchService class with the specified configuration settings.
+//
+// @param {object} config - The configuration settings for the SearchService.
+// @param {string} config.endpoint - The endpoint URL for the search service.
+// @param {number} config.maxResults - The maximum number of results to return per search query.
+// @param {boolean} config.useCache - A flag indicating whether to utilize caching for search results.
+service SearchService {
+  // BasicSearch searches for entities based on the specified search query.
+  rpc Search (TaskAssignment) returns (Report);
+}

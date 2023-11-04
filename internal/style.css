@@ -1,0 +1,38 @@
+body {
+    font-family: sans-serif;
+    max-width: 800px;
+    margin: auto;
+}
+
+.element {
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    background: #efefef;
+    padding: 0;
+    margin-bottom: 2em;
+    overflow: hidden;
+
+}
+
+.element h3 {
+    margin: 0;
+    padding: 4px;
+    width: 100%;
+    background: #ddd;
+}
+
+.element p {
+    padding: 4px;
+}
+
+.element table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.element table th, td {
+    text-align: left;
+    padding: 4px 8px;
+    border-bottom: 1px solid #ddd;
+}
