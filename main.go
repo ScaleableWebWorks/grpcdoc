@@ -25,7 +25,7 @@ func runServer(addr string, doc *string) error {
 func main() {
 	outputFlag := flag.String("out", "", "output file (default: stdout)")
 	httpFlag := flag.String("http", "", "run http server (default: off) - example: -http=:8000")
-	// TODO styleFlag := flag.String("style", "", "custom css style file")
+	styleFlag := flag.String("style", "", "custom css file")
 	flag.Parse()
 
 	var definitions []*proto.Proto
@@ -60,7 +60,19 @@ func main() {
 		}
 	}
 
-	doc, err := GenerateDoc(definitions...)
+	var customStyle *string
+	if *styleFlag != "" {
+		data, err := os.ReadFile(*styleFlag)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		cssStr := string(data)
+
+		customStyle = &cssStr
+	}
+
+	doc, err := GenerateDoc(customStyle, definitions...)
 	if err != nil {
 		log.Fatal(err)
 	}

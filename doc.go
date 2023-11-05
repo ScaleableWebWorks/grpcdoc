@@ -14,10 +14,10 @@ import (
 //go:embed internal/doc.html
 var doc string
 
-// Holds the default css style for the documentation.
+// Holds the default css defaultStyle for the documentation.
 //
 //go:embed internal/style.css
-var style string
+var defaultStyle string
 
 // A list of all protobuf scalar types as defined here:
 // https://developers.google.com/protocol-buffers/docs/proto3#scalar
@@ -73,7 +73,7 @@ type Data struct {
 }
 
 // GenerateDoc takes a list of protobuf definitions and generates a html documentation.
-func GenerateDoc(definitions ...*proto.Proto) (string, error) {
+func GenerateDoc(customStyle *string, definitions ...*proto.Proto) (string, error) {
 	t, err := template.New("doc").Parse(doc)
 	if err != nil {
 		return "", err
@@ -169,9 +169,14 @@ func GenerateDoc(definitions ...*proto.Proto) (string, error) {
 		}
 	}
 
+	var style = customStyle
+	if style == nil {
+		style = &defaultStyle
+	}
+
 	data := Data{
 		Filename: "",
-		Style:    template.CSS(style),
+		Style:    template.CSS(*style),
 		Services: services,
 		Messages: messages,
 		Enums:    enums,
