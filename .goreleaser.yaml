@@ -36,6 +36,19 @@ archives:
       - goos: windows
         format: zip
 
+brews:
+  - name: grpcdoc
+    description: cli to generate comprehensive html documentation for grpc/protobuf
+    homepage: https://github.com/ScaleableWebWorks/grpcdoc
+    license: "MIT"
+    tap:
+      owner: ScaleableWebWorks
+      name: homebrew-grpcdoc
+    commit_author:
+      name: mrico
+      email: marco@mrico.eu
+    folder: Formula
+
 checksum:
   name_template: 'checksums.txt'
 
