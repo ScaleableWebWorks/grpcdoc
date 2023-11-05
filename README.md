@@ -50,6 +50,12 @@ __Read proto file from stdin__
 cat ../examples/example.proto | grpcdoc > doc.html
 ```
 
+__Generate and serve documentation on localhost:8000__
+
+```sh
+grpcdoc -http=:8000 ./path/to/your/file.proto
+```
+
 _For more examples and usage, please refer to the [Wiki][wiki]._
 
 ## Development setup
