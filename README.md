@@ -10,6 +10,13 @@
 
 ## Installation
 
+### Using Homebrew
+  
+```sh
+brew tap ScaleableWebWorks/grpcdoc
+brew install grpcdoc
+````
+
 ### Manual installation
 
 1. Go to [releases](https://github.com/ScaleableWebWorks/grpcdoc/releases)

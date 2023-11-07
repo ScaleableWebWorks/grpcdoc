@@ -41,7 +41,7 @@ brews:
     description: cli to generate comprehensive html documentation for grpc/protobuf
     homepage: https://github.com/ScaleableWebWorks/grpcdoc
     license: "MIT"
-    tap:
+    repository:
       owner: ScaleableWebWorks
       name: homebrew-grpcdoc
     commit_author:
