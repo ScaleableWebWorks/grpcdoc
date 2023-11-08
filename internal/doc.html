@@ -47,7 +47,11 @@
             {{range .Services}}
             <tr>
                 <td><a href="#{{.Name}}">{{.Name}}</a></td>
-                <td>{{.Description}}</td>
+                <td>
+                    <div class="description">
+                        {{.Description}}
+                    </div>
+                </td>
             </tr>
             {{end}}
         </table>
@@ -56,7 +60,7 @@
     {{range .Services}}
     <div class="element service">
         <h3>{{.Name}}</h3>
-        <p>{{.Description}}</p>
+        <div class="description">{{.FullComment}}</div>
         <table>
             <tr>
                 <th>Method</th>
@@ -66,7 +70,11 @@
             <tr>
                 <td><strong>{{.Name}}</strong>&nbsp;(&nbsp;<a href="#{{.Input}}">{{.Input}}</a>&nbsp;) <a
                         href="#{{.Output}}">{{.Output}}</a></td>
-                <td>{{.Description}}</td>
+                <td>
+                    <div class="description">
+                        {{.Description}}
+                    </div>
+                </td>
             </tr>
             {{end}}
         </table>
@@ -85,7 +93,11 @@
             {{range .Messages}}
             <tr>
                 <td><a href="#{{.Name}}">{{.Name}}</a></td>
-                <td>{{.Description}}</td>
+                <td>
+                    <div class="description">
+                        {{.Description}}
+                    </div>
+                </td>
             </tr>
             {{end}}
         </table>
@@ -97,7 +109,7 @@
     <a id="{{.Name}}"></a>
     <div class="element message">
         <h3>{{.Name}}</h3>
-        <p>{{.Description}}</p>
+        <div class="description">{{.FullComment}}</div>
 
         <table>
             <tr>
@@ -117,7 +129,11 @@
                         <a href="#{{.Type}}">{{.Type}}{{ if .IsRepeated }}[]{{ end }}</a>
                     {{ end }}
                 </td>
-                <td>{{.Description}}</td>
+                <td>
+                    <div class="description">
+                        {{.Description}}
+                    </div>
+                </td>
             </tr>
             {{end}}
         </table>
@@ -129,7 +145,7 @@
     <a id="{{.Name}}"></a>
     <div class="element enum">
         <h3>{{.Name}}</h3>
-        <p>{{.Description}}</p>
+        <div class="description">{{.FullComment}}</div>
         <table>
             <tr>
                 <th>Name</th>

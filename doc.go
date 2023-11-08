@@ -5,6 +5,8 @@ import (
 	_ "embed"
 	"fmt"
 	"github.com/emicklei/proto"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
 	"html/template"
 	"strings"
 )
@@ -24,17 +26,23 @@ var defaultStyle string
 var scalarTypes = [...]string{"double", "float", "int32", "int64", "uint32", "uint64",
 	"sint32", "sint64", "fixed32", "fixed64", "sfixed32", "sfixed64", "bool", "string", "bytes"}
 
+var md = goldmark.New(
+	goldmark.WithExtensions(extension.GFM),
+)
+
 // ServiceDoc represents a service which is used for template rendering.
 type ServiceDoc struct {
 	Name        string
-	Description string
+	Description template.HTML
+	FullComment template.HTML
 	Methods     []*MethodDoc
 }
 
 // MessageDoc represents a message which is used for template rendering.
 type MessageDoc struct {
 	Name        string
-	Description string
+	Description template.HTML
+	FullComment template.HTML
 	Fields      []*FieldDoc
 }
 
@@ -42,7 +50,7 @@ type MessageDoc struct {
 type FieldDoc struct {
 	FieldNumber uint8
 	Name        string
-	Description string
+	Description template.HTML
 	Type        string
 	// IsScalar is true if the field type is a protobuf scalar type.
 	IsScalar   bool
@@ -52,7 +60,7 @@ type FieldDoc struct {
 // MethodDoc represents a method of a grpc service which is used for template rendering.
 type MethodDoc struct {
 	Name        string
-	Description string
+	Description template.HTML
 	Input       string
 	Output      string
 }
@@ -60,7 +68,8 @@ type MethodDoc struct {
 // EnumDoc represents an enum which is used for template rendering.
 type EnumDoc struct {
 	Name        string
-	Description string
+	Description template.HTML
+	FullComment template.HTML
 	Fields      []*FieldDoc
 }
 
@@ -92,7 +101,6 @@ func GenerateDoc(customStyle *string, definitions ...*proto.Proto) (string, erro
 			case *proto.Package:
 				pkg := element.(*proto.Package)
 				pkgName = &pkg.Name
-				println("Package: ", pkg.Name)
 			case *proto.Service:
 				service := element.(*proto.Service)
 				var methods []*MethodDoc
@@ -112,6 +120,7 @@ func GenerateDoc(customStyle *string, definitions ...*proto.Proto) (string, erro
 				doc := ServiceDoc{
 					Name:        fullQualifiedName(pkgName, service.Name),
 					Description: comment(service.Comment),
+					FullComment: fullComment(service.Comment),
 					Methods:     methods,
 				}
 				services = append(services, &doc)
@@ -138,6 +147,7 @@ func GenerateDoc(customStyle *string, definitions ...*proto.Proto) (string, erro
 				doc := MessageDoc{
 					Name:        fullQualifiedName(pkgName, message.Name),
 					Description: comment(message.Comment),
+					FullComment: fullComment(message.Comment),
 					Fields:      fields,
 				}
 
@@ -161,6 +171,7 @@ func GenerateDoc(customStyle *string, definitions ...*proto.Proto) (string, erro
 				doc := EnumDoc{
 					Name:        fullQualifiedName(pkgName, enum.Name),
 					Description: comment(enum.Comment),
+					FullComment: fullComment(enum.Comment),
 					Fields:      fields,
 				}
 
@@ -218,11 +229,35 @@ func fullQualifiedName(pkgName *string, name string) string {
 	return fmt.Sprintf("%v.%v", *pkgName, name)
 }
 
-// comment returns the comment or empty string if the comment is nil.
-func comment(c *proto.Comment) string {
+// comment returns the first line of the comment or empty string if the comment is nil.
+func comment(c *proto.Comment) template.HTML {
 	if c == nil {
 		return ""
 	}
 
-	return c.Message()
+	return renderMarkdown(c.Message())
+}
+
+func fullComment(c *proto.Comment) template.HTML {
+	if c == nil {
+		return ""
+	}
+
+	var sb strings.Builder
+	for _, line := range c.Lines {
+		sb.WriteString(line)
+		sb.WriteString("\n")
+	}
+
+	return renderMarkdown(sb.String())
+}
+
+func renderMarkdown(s string) template.HTML {
+	var buf bytes.Buffer
+	err := md.Convert([]byte(s), &buf)
+	if err != nil {
+		return template.HTML(s)
+	}
+
+	return template.HTML(buf.String())
 }

@@ -68,7 +68,6 @@ func main() {
 		}
 
 		cssStr := string(data)
-
 		customStyle = &cssStr
 	}
 

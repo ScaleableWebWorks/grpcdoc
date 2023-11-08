@@ -1,2 +1,4 @@
 github.com/emicklei/proto v1.12.2 h1:ZDyDzrfMt7ncmyor/j07uoOCGLKtU5F87vTPwIzLe/o=
 github.com/emicklei/proto v1.12.2/go.mod h1:rn1FgRS/FANiZdD2djyH7TMA9jdRDcYQ9IEN9yvjX0A=
+github.com/yuin/goldmark v1.6.0 h1:boZcn2GTjpsynOsC0iJHnBWa4Bi0qzfJjthwauItG68=
+github.com/yuin/goldmark v1.6.0/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
